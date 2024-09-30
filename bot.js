@@ -20,14 +20,20 @@ bot.on('message', (msg) => {
 
         // Replace Instagram links with ddinstagram.com
         updatedMessage = updatedMessage.replace(
-            /https?:\/\/(www\.)?instagram\.com\//g,
+            /https?:\/\/(www\.)?instagram\.com\//gi,
             'https://ddinstagram.com/'
         );
 
         // Replace x.com and twitter.com links with fixupx.com
         updatedMessage = updatedMessage.replace(
-            /https?:\/\/(www\.)?(x\.com|twitter\.com)\//g,
+            /https?:\/\/(www\.)?(x\.com|twitter\.com)\//gi,
             'https://fixupx.com/'
+        );
+
+        // Replace TikTok links with vxtiktok.com
+        updatedMessage = updatedMessage.replace(
+            /https?:\/\/(www\.|vm\.)?tiktok\.com\//gi,
+            'https://vxtiktok.com/'
         );
 
         // If changes were made, send the updated message
