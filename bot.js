@@ -34,15 +34,15 @@ bot.on('message', async (msg) => {
                     continue;
                 }
 
+                // Normalize the hostname to lowercase
                 let hostname = parsedUrl.hostname.toLowerCase();
 
                 // Normalize Instagram URLs without "www"
                 if (hostname === 'instagram.com') {
-                    hostname = 'www.instagram.com';
-                    parsedUrl.hostname = hostname;
+                    parsedUrl.hostname = 'www.instagram.com';
                 }
 
-                // For Instagram links
+                // For Instagram links (including www.instagram.com)
                 if (hostname.includes('instagram.com')) {
                     parsedUrl.hostname = 'ddinstagram.com';  // Modify hostname to ddinstagram.com
                     const newUrl = parsedUrl.toString();
