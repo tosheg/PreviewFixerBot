@@ -18,13 +18,18 @@ bot.on('message', async (msg) => {
         if (!messageText) return;
 
         // Find URLs in the message
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|instagram\.com[^\s]*)/gi;
         const urls = messageText.match(urlRegex);
 
         if (urls) {
             const modifiedLinks = [];
 
             for (let link of urls) {
+                // If the link does not start with http or https, prepend "https://"
+                if (!/^https?:\/\//i.test(link)) {
+                    link = 'https://' + link;
+                }
+
                 let parsedUrl;
                 try {
                     parsedUrl = new URL(link);
