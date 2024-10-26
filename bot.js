@@ -6,7 +6,7 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
-bot.on('message', (msg) => {
+bot.on('message', async (msg) => {
     try {
         // Prevent the bot from responding to its own messages or other bots
         if (msg.from.is_bot) return;
@@ -22,6 +22,8 @@ bot.on('message', (msg) => {
         const urls = messageText.match(urlRegex);
 
         if (urls) {
+            const modifiedLinks = [];
+
             for (let link of urls) {
                 let parsedUrl;
                 try {
@@ -32,50 +34,30 @@ bot.on('message', (msg) => {
                 }
 
                 let hostname = parsedUrl.hostname.toLowerCase();
-                let pathname = parsedUrl.pathname.toLowerCase();
 
                 // For Instagram links
                 if (hostname.endsWith('instagram.com')) {
-                    // Modify the hostname to 'ddinstagram.com'
                     parsedUrl.hostname = parsedUrl.hostname.replace(/^(.*\.)?instagram\.com$/, 'ddinstagram.com');
-                    let newUrl = parsedUrl.toString();
-
-                    // Prepare the message with the hyperlink
-                    const message = `<a href="${newUrl}">link</a>`;
-                    bot.sendMessage(chatId, message, {
-                        parse_mode: 'HTML',
-                        disable_web_page_preview: false,
-                    });
+                    modifiedLinks.push(parsedUrl.toString());
                 }
                 // For TikTok links
                 else if (hostname.endsWith('tiktok.com')) {
-                    // Modify the hostname by replacing 'tiktok.com' with 'vxtiktok.com'
                     parsedUrl.hostname = parsedUrl.hostname.replace(/tiktok\.com$/, 'vxtiktok.com');
-                    let newUrl = parsedUrl.toString();
-
-                    // Prepare the message with the hyperlink
-                    const message = `<a href="${newUrl}">link</a>`;
-                    bot.sendMessage(chatId, message, {
-                        parse_mode: 'HTML',
-                        disable_web_page_preview: false,
-                    });
+                    modifiedLinks.push(parsedUrl.toString());
                 }
-                // For Twitter links
-                else if (
-                    hostname.endsWith('twitter.com') ||
-                    hostname.endsWith('x.com')
-                ) {
-                    // Modify all Twitter links
+                // For Twitter/X links
+                else if (hostname.endsWith('twitter.com') || hostname.endsWith('x.com')) {
                     parsedUrl.hostname = 'd.fxtwitter.com';
-                    let newUrl = parsedUrl.toString();
-
-                    // Prepare the message with the hyperlink
-                    const message = `<a href="${newUrl}">link</a>`;
-                    bot.sendMessage(chatId, message, {
-                        parse_mode: 'HTML',
-                        disable_web_page_preview: false,
-                    });
+                    modifiedLinks.push(parsedUrl.toString());
                 }
+            }
+
+            if (modifiedLinks.length > 0) {
+                const message = modifiedLinks.map((link, index) => `<a href="${link}">link ${index + 1}</a>`).join('\n');
+                await bot.sendMessage(chatId, message, {
+                    parse_mode: 'HTML',
+                    disable_web_page_preview: false,
+                });
             }
         }
     } catch (error) {
