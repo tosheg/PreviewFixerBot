@@ -38,14 +38,15 @@ bot.on('message', async (msg) => {
 
                 // For Instagram links
                 if (hostname.includes('instagram.com')) {
-                    parsedUrl.hostname = 'ddinstagram.com';  // Simplified replacement
+                    parsedUrl.hostname = 'ddinstagram.com';
                     const newUrl = parsedUrl.toString();
                     console.log(`Modified Instagram link: ${newUrl}`);  // Log the new URL
                     modifiedLinks.push(newUrl);
                 }
                 // For TikTok links
                 else if (hostname.includes('tiktok.com')) {
-                    parsedUrl.hostname = 'vxtiktok.com';  // Simplified replacement
+                    // Replace 'tiktok.com' with 'vxtiktok.com' while keeping everything else intact
+                    parsedUrl.hostname = parsedUrl.hostname.replace('tiktok.com', 'vxtiktok.com');
                     const newUrl = parsedUrl.toString();
                     console.log(`Modified TikTok link: ${newUrl}`);  // Log the new URL
                     modifiedLinks.push(newUrl);
