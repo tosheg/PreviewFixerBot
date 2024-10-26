@@ -29,26 +29,33 @@ bot.on('message', async (msg) => {
                 try {
                     parsedUrl = new URL(link);
                 } catch (e) {
-                    // Skip invalid URLs
+                    // Log skipped invalid URLs for debugging
+                    console.warn(`Skipping invalid URL: ${link}`, e.message);
                     continue;
                 }
 
                 let hostname = parsedUrl.hostname.toLowerCase();
 
                 // For Instagram links
-                if (hostname.endsWith('instagram.com')) {
-                    parsedUrl.hostname = parsedUrl.hostname.replace(/^(.*\.)?instagram\.com/, 'ddinstagram.com');
-                    modifiedLinks.push(parsedUrl.toString());
+                if (hostname.includes('instagram.com')) {
+                    parsedUrl.hostname = 'ddinstagram.com';  // Simplified replacement
+                    const newUrl = parsedUrl.toString();
+                    console.log(`Modified Instagram link: ${newUrl}`);  // Log the new URL
+                    modifiedLinks.push(newUrl);
                 }
                 // For TikTok links
-                else if (hostname.endsWith('tiktok.com')) {
-                    parsedUrl.hostname = parsedUrl.hostname.replace(/tiktok\.com$/, 'vxtiktok.com');
-                    modifiedLinks.push(parsedUrl.toString());
+                else if (hostname.includes('tiktok.com')) {
+                    parsedUrl.hostname = 'vxtiktok.com';  // Simplified replacement
+                    const newUrl = parsedUrl.toString();
+                    console.log(`Modified TikTok link: ${newUrl}`);  // Log the new URL
+                    modifiedLinks.push(newUrl);
                 }
                 // For Twitter/X links
-                else if (hostname.endsWith('twitter.com') || hostname.endsWith('x.com')) {
+                else if (hostname.includes('twitter.com') || hostname.includes('x.com')) {
                     parsedUrl.hostname = 'd.fxtwitter.com';
-                    modifiedLinks.push(parsedUrl.toString());
+                    const newUrl = parsedUrl.toString();
+                    console.log(`Modified Twitter/X link: ${newUrl}`);  // Log the new URL
+                    modifiedLinks.push(newUrl);
                 }
             }
 
