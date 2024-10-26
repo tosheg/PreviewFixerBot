@@ -35,9 +35,9 @@ bot.on('message', (msg) => {
                 let pathname = parsedUrl.pathname.toLowerCase();
 
                 // For Instagram links
-                if (hostname === 'instagram.com' || hostname === 'www.instagram.com') {
+                if (hostname.endsWith('instagram.com')) {
                     // Modify the hostname to 'ddinstagram.com'
-                    parsedUrl.hostname = 'ddinstagram.com';
+                    parsedUrl.hostname = parsedUrl.hostname.replace(/^(.*\.)?instagram\.com$/, 'ddinstagram.com');
                     let newUrl = parsedUrl.toString();
 
                     // Prepare the message with the hyperlink
@@ -47,10 +47,10 @@ bot.on('message', (msg) => {
                         disable_web_page_preview: false,
                     });
                 }
-                // For TikTok links (vm.tiktok.com or vt.tiktok.com)
-                else if (hostname === 'vm.tiktok.com' || hostname === 'vt.tiktok.com') {
+                // For TikTok links
+                else if (hostname.endsWith('tiktok.com')) {
                     // Modify the hostname by replacing 'tiktok.com' with 'vxtiktok.com'
-                    parsedUrl.hostname = hostname.replace('tiktok.com', 'vxtiktok.com');
+                    parsedUrl.hostname = parsedUrl.hostname.replace(/tiktok\.com$/, 'vxtiktok.com');
                     let newUrl = parsedUrl.toString();
 
                     // Prepare the message with the hyperlink
@@ -62,24 +62,19 @@ bot.on('message', (msg) => {
                 }
                 // For Twitter links
                 else if (
-                    hostname === 'twitter.com' ||
-                    hostname === 'www.twitter.com' ||
-                    hostname === 'x.com' ||
-                    hostname === 'www.x.com'
+                    hostname.endsWith('twitter.com') ||
+                    hostname.endsWith('x.com')
                 ) {
-                    // Check if path contains 'photo' or 'video'
-                    if (pathname.includes('/photo') || pathname.includes('/video')) {
-                        // Add 'd.' before 'fxtwitter.com'
-                        parsedUrl.hostname = 'd.fxtwitter.com';
-                        let newUrl = parsedUrl.toString();
+                    // Modify all Twitter links
+                    parsedUrl.hostname = 'd.fxtwitter.com';
+                    let newUrl = parsedUrl.toString();
 
-                        // Prepare the message with the hyperlink
-                        const message = `<a href="${newUrl}">link</a>`;
-                        bot.sendMessage(chatId, message, {
-                            parse_mode: 'HTML',
-                            disable_web_page_preview: false,
-                        });
-                    }
+                    // Prepare the message with the hyperlink
+                    const message = `<a href="${newUrl}">link</a>`;
+                    bot.sendMessage(chatId, message, {
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: false,
+                    });
                 }
             }
         }
