@@ -37,7 +37,7 @@ bot.on('message', async (msg) => {
 
                 // For Instagram links
                 if (hostname.endsWith('instagram.com')) {
-                    parsedUrl.hostname = parsedUrl.hostname.replace(/^(.*\.)?instagram\.com$/, 'ddinstagram.com');
+                    parsedUrl.hostname = parsedUrl.hostname.replace(/^(.*\.)?instagram\.com/, 'ddinstagram.com');
                     modifiedLinks.push(parsedUrl.toString());
                 }
                 // For TikTok links
